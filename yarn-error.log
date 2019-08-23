@@ -1,0 +1,95 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn build
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  11.11.0
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "webpack-image-spritesmith",
+    "version": "0.0.1",
+    "description": "xmyxm",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node app.js",
+      "build": "webpack --config ./webpack/webpack.pro.config.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/xmyxm/webpack-imgmin.git"
+    },
+    "keywords": [
+      "imgmin"
+    ],
+    "author": "xmyxm",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/xmyxm/webpack-imgmin/issues"
+    },
+    "homepage": "https://github.com/xmyxm/webpack-imgmin#readme",
+    "devDependencies": {
+      "@babel/cli": "^7.5.5",
+      "@babel/core": "^7.5.5",
+      "@babel/plugin-proposal-class-properties": "^7.5.5",
+      "@babel/plugin-transform-runtime": "^7.5.5",
+      "@babel/preset-env": "^7.5.5",
+      "@babel/preset-react": "^7.0.0",
+      "@babel/runtime": "^7.5.5",
+      "autoprefixer": "^9.6.1",
+      "babel-loader": "^8.0.6",
+      "clean-webpack-plugin": "^3.0.0",
+      "core-js": "^3.1.4",
+      "css-loader": "^3.1.0",
+      "file-loader": "^4.2.0",
+      "html-webpack-plugin": "^3.2.0",
+      "image-webpack-loader": "^5.0.0",
+      "imagemin-webpack-plugin": "^2.4.2",
+      "less": "^3.9.0",
+      "less-loader": "^5.0.0",
+      "mini-css-extract-plugin": "^0.8.0",
+      "open": "^6.4.0",
+      "postcss": "^7.0.17",
+      "postcss-loader": "^3.0.0",
+      "postcss-sprites": "^4.2.1",
+      "react-dom": "^16.8.6",
+      "style-loader": "^0.23.1",
+      "url-loader": "^2.1.0",
+      "webpack": "^4.39.1",
+      "webpack-cli": "^3.3.6",
+      "webpack-dev-server": "^3.7.2"
+    },
+    "dependencies": {
+      "react": "^16.8.6"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Command failed.
+  Exit code: 2
+  Command: sh
+  Arguments: -c webpack --config ./webpack/webpack.pro.config.js
+  Directory: /Users/chenxuanfeng/mydata/webpack-image-sprites-auto
+  Output:
+  
+      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
+      at ChildProcess.emit (events.js:197:13)
+      at maybeClose (internal/child_process.js:984:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:265:5)
