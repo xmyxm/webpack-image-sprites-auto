@@ -21,7 +21,7 @@ config.module.rules.push(
             {
                 // 既然base.config中配置了雪碧图，这里就无需使用 url-loader 的base64能力，直接使用 file-loader 即可，
                 // 如果非常小的图片想用 url-loader 处理也可以
-                loader: 'file-loader', 
+                loader: 'file-loader', //'file-loader', 
                 options: {
                     name: "img/[name].[ext]"
                 }
@@ -33,7 +33,7 @@ config.module.rules.push(
                 }
             }
         ]
-    },
+    }
 )
 config.plugins.push(
     // css文件抽离设置
