@@ -1,69 +1,42 @@
-/** postcss-sprites-config.js
- * 这里的项目结构是
- * —src
- * ——icons
- * ———icons-@1x
- * ———— *.png
- * ———icons-@2x
- * ———— *.png
- *  */
 var postcss = require('postcss');
-// 合法的散列图path 查找 /src/icons/*/*.png
-const REG_SPRITES_PATH = /\/icons\/.*/i
-// 合法的retina标识 @*x
-const REG_SPRITES_RETINA = /@(\d+)x\./i
-// split
-const SPLIT = true
-const SPLIT_REG = /\?/ig
-const RETINA = true
-const OUTPUT_PATH = "./dist/sptite"
+
+// 详细使用链接如：https://github.com/2createStudio/postcss-sprites
 
 module.exports = {
-    // 保存输出spritesheet的文件夹的相对路径
-    spritePath: OUTPUT_PATH,
-    //过滤 除了 icons 以外 的图片链接
-    //需返回一个Promise对象
-    // filterBy: (image) => {
-    //     return REG_SPRITES_PATH.test(image.url) ? Promise.resolve() : Promise.reject()
-    // },
-    // //分组 分出 1 / 2 / 3 / n倍 图
-    // groupBy: (image) => {
-    //     let groups = null;
-    //     let groupName = '';
-    //     let module = image.originalUrl.split(/\?/)
-    //     image.url = module[0]
-    //     if (module.length > 1) {
-    //         //分模块 ? 跟模块名
-    //         groupName = module[1] + '-'
-    //     }
-    //     if (SPLIT) {
-    //         groups = REG_SPRITES_PATH.exec(image.url);
-    //         groupName += groups ? groups[1] : 'icons';
-    //     } else {
-    //         groupName += 'icons';
-    //     }
-    //     //处理多倍图的情况
-    //     if (RETINA) {
-    //         image.retina = RETINA;
-    //         image.ratio = 1;
-    //         let ratio = REG_SPRITES_RETINA.exec(image.url);
-    //         if (ratio) {
-    //             ratio = ratio[1];
-    //             while (ratio > 10) {
-    //                 ratio = ratio / 10;
-    //             }
-    //             image.ratio = ratio;
-    //             image.groups = image.groups.filter((group) => {
-    //                 return ('@' + ratio + 'x') !== group;
-    //             });
-    //             groupName += '@' + ratio + 'x';
-    //         }
-    //     }
-    //     return Promise.resolve(groupName);
-    // },
-    // 转换百分比定位
+    stylesheetPath: null, // 默认值：null, 保存输出样式表的文件夹的相对路径。如果它为null，将使用CSS文件的路径
+    spritePath: "./dist/sptite", // 必填，保存输出spritesheet的文件夹的相对路径
+    basePath: "./", // 默认值：file，您的基本路径将用于具有绝对CSS网址的图像
+    relativeTo: "file", // 默认值：file，可选值file|rule。 指示url是否应该与当前CSS上下文或原始CSS样式表文件相对
+    filterBy: function(image) { // 默认值：[], 定义过滤器函数，用于处理样式表中创建的图像列表，每个函数都必须返回一个Promise应该被解析或拒绝的函数。
+		// 过滤器，只处理png图片
+		if (!/\.png$/.test(image.url)) {
+			return Promise.reject();
+		}
+		return Promise.resolve();
+	},
+    groupBy: function (image) { // 默认值：[], 定义将操作样式表中创建的图像列表的组函数，每个函数都必须返回一个Promise应该用字符串解析或拒绝的函数
+        // 图片相对路径
+        let url = image.url
+        // 去掉图片名的相对路径
+        var url_yx = url.substr(0, url.lastIndexOf("/"))
+        // 获取图片所在的文件夹名称
+        var folder_name = url_yx.substr(url_yx.lastIndexOf("/") + 1)
+        return Promise.resolve(folder_name)
+    },
+    retina: false, // 默认值：false, 定义是否在文件名中搜索视网膜标记
+    spritesmith: {
+        engine: "pixelsmith", // 默认值：pixelsmith, 配置雪碧图转换引擎
+        algorithm: "binary-tree", // 默认值：binary-tree, 配置雪碧图算法
+        padding: 0, // 默认值：0, 配置雪碧图间隔的空间
+        engineOpts: {}, // 默认值：{}, 引擎默认参数配置
+        exportOpts: {} // 默认值：{}, 引擎导出选项
+    },
+    svgsprite: null, // 生成SVG的基础配置，具体事例见链接 https://github.com/jkphl/svg-sprite#configuration-basics
+    verbose: false, // 默认值：false
+    // 钩子函数，转换百分比定位
     hooks: {
-        onUpdateRule: function (rule, token, image) {
+        onSaveSpritesheet: null, // 允许重写生成的spritesheet数据的钩子。如果返回值为string，则将其用作文件路径值，如果返回值为object，则将其用作将与当前spritesheet数据合并的值。返回值也可以是Promise，它应返回字符串或对象。
+        onUpdateRule: function (rule, token, image) { // 钩子函数，允许重写图像的CSS输出
             var backgroundSizeX = (image.spriteWidth / image.coords.width) * 100;
             var backgroundSizeY = (image.spriteHeight / image.coords.height) * 100;
             var backgroundPositionX = (image.coords.x / (image.spriteWidth - image.coords.width)) * 100;
