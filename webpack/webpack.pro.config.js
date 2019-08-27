@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');//webpack插件，用于清除目录文件
 const config = require('./webpack.base.config.js');
 
 config.mode = "production"
@@ -36,6 +37,7 @@ config.module.rules.push(
     }
 )
 config.plugins.push(
+    new CleanWebpackPlugin(),// 默认删除webpack output.path目录中的所有文件
     // css文件抽离设置
     new MiniCssExtractPlugin({
         filename: 'css/[name].css'

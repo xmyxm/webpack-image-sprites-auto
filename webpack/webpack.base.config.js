@@ -4,7 +4,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');//webpack插件，用于清除目录文件
 const packageFilePath = path.join(__dirname, '../dist');
 
 module.exports = {
@@ -59,7 +58,6 @@ module.exports = {
     },
     plugins: [
         new webpack.BannerPlugin('点评平台研发中心-图片雪碧图方案测试'),
-        new CleanWebpackPlugin(),// 默认删除webpack output.path目录中的所有文件
         new HtmlWebpackPlugin({
             template: './src/html/index.html'
             , filename: 'index.html'//可以使用hash命名

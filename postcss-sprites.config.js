@@ -1,6 +1,7 @@
 var postcss = require('postcss');
 
 // 详细使用链接如：https://github.com/2createStudio/postcss-sprites
+// 如果要在引入或编辑图像资源时对其进行热加载，可以配置postcss加载程序，以便在保存时为每个sprite表添加一个哈希值。https://github.com/2createStudio/postcss-sprites/blob/master/examples/webpack-hot-load.md
 
 module.exports = {
     stylesheetPath: null, // 默认值：null, 保存输出样式表的文件夹的相对路径。如果它为null，将使用CSS文件的路径
