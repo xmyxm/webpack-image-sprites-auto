@@ -3,15 +3,10 @@ const webpack = require('webpack');
 const open = require('open');
 const config = require('./webpack/webpack.beta.config');
 const port =  config.devServer.port;
-const host = config.devServer.host || '127.0.0.1';
+const host = config.devServer.host;
 
-for (let key in config.entry) {
-	let ar = config.entry[key];
-	if (key != 'common') {
-		ar.unshift('webpack-dev-server/client?http://'+ host +':'+ port +'/', 'webpack/hot/dev-server');
-	}
-}
-
+// 在热加载时直接返回更新文件名，而不是文件的id。
+config.plugins.push(new webpack.NamedModulesPlugin());
 //开发环境热更新配置
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
