@@ -33,7 +33,7 @@ module.exports = {
         exportOpts: {} // 默认值：{}, 引擎导出选项
     },
     svgsprite: null, // 生成SVG的基础配置，具体事例见链接 https://github.com/jkphl/svg-sprite#configuration-basics
-    verbose: false, // 默认值：false
+    verbose: false, // 默认值：false，将插件输出打印到控制台。
     // 钩子函数，转换百分比定位
     hooks: {
         onSaveSpritesheet: null, // 允许重写生成的spritesheet数据的钩子。如果返回值为string，则将其用作文件路径值，如果返回值为object，则将其用作将与当前spritesheet数据合并的值。返回值也可以是Promise，它应返回字符串或对象。

@@ -1,6 +1,6 @@
 ### 一、目标
     实现项目构建时图片的最优性能方案：自动合并雪碧图并压缩所有图片
-    雪碧图方案：webpack-spritesmith
+    雪碧图方案：postcss-sprites
     图片压缩方案：image-webpack-loader
 
 ### 二、如何体验
@@ -11,61 +11,137 @@
 ```
 2、页面展示
 
-<img src="https://p0.meituan.net/scarlett/edd833b9bed1f94acb71adc626cd295537399.png">
+<img src="https://p0.meituan.net/scarlett/a274cce3e3fa284375fabfc8087017e3118069.png">
 
 
 ### 二、依赖能力
-    webpack-spritesmith 把指定目录下的图片合并成雪碧图且生成一套雪碧图的css，项目中需要使用雪碧图的地方直接引入这个css即可
+    postcss-sprites 自动转换css中依赖的各种本地图片，并自动替换当前图片的css样式
     image-webpack-loader 压缩各种格式图片
 
-### 三、webpack-spritesmith 配置介绍
+### 三、postcss-sprites 配置介绍
 
-1、src 这个属性用于配置你从哪里捕获这些小图片，建议使用时把所有要合并的icon放在同一个文件夹
-```
-cwd 
-必填
-就是小图片所在的目录，注意不会递归子目录，子目录图片不会被处理
+###### stylesheetPath
 
+> 保存输出样式表的文件夹的相对路径。如果它为null，将使用CSS文件的路径
 
-glob 
-必填
-类型是字符串，也可以是正则，用来匹配符合要求的图片文件
-```
+- 默认值: null
+- 是否必传: `false`
 
-2、target 雪碧图和样式输出文件的配置
-```
-image 
-必填
-雪碧图输出完整地址，必须携带文件名及后缀，（注意这里不是指打包后，而是指打包前，实际打包还是被url-loader处理的）
+###### spritePath
 
-css 
-必填
-输出的css文件，可以是字符串、或者数组（如果是数组的话，输出多个同样的文件）
-```
+> 保存输出spritesheet的文件夹的相对路径
 
-3、apiOptions 配置属性
-```
-generateSpriteName 
-可选，
-是一个函数，有一个参数（是文件的绝对路径，字符串），默认值是返回文件名（不含后缀和路径）。
-这个用于命名类名，默认是文件名作为类名
+- 默认值: `./`
+- 是否必传: `true`
 
-cssImageRef 
-必填，
-生成的图片在 API 中被引用的路径。
-简单来说，就是你上面输出了 image 和 css ，那么在 css 用什么样的路径书写方式来引用 image 图片（可以是别名，或相对路径）
+###### basePath
 
-handlebarsHelpers 
-可选
-是一个对象，并且是全局的（意味着后面的本插件的这个配置会覆盖前面的配置）。
-给 handlebars 用的，没搞懂，但一般用不上。
-```
+> 您的基本路径将用于具有绝对CSS网址的图像
 
-4、spritesmithOptions 可选，配置 <a href="https://github.com/twolfson/spritesmith">spritesmith</a> 用的。里面可以定制比如雪碧图的排列方向。
+- 默认值: `./`
+- 是否必传: `false`
 
-5、retina 可选，retina 屏的配置。关于解决 retina 屏的雪碧图的问题，可以参考这个 <a href="https://www.toobug.net/article/css_image_sprites_on_retina_screen.html">Retina屏下的CSS雪碧图</a>，所以最好给 spritesmithOptions.padding 属性赋值 2。这个属性用于图片放大缩小。
+###### relativeTo
 
-6、customTemplates 可选，这个应该是指用户自定义 css 模板, 官方有自己的模板，不完全适用这里的Demo，有稍作调整。
+> 指示url是否应该与当前CSS上下文或原始CSS样式表文件相对，Options: `file|rule`
+
+- 默认值: `file`
+- 是否必传: `false`
+
+###### filterBy
+
+>  定义过滤器函数，用于处理样式表中创建的图像列表，每个函数都必须返回一个Promise应该被解析或拒绝的函数。
+
+- 默认值: `[]`
+- 是否必传: `false`
+
+###### groupBy
+
+> 定义将操作样式表中创建的图像列表的组函数，每个函数都必须返回一个Promise应该用字符串解析或拒绝的函数
+
+- 默认值: `[]`
+- 是否必传: `false`
+
+###### retina
+
+> 定义是否在文件名中搜索视网膜标记
+
+- 默认值: `false`
+- 是否必传: `false`
+
+###### hooks
+
+> 钩子函数配置
+
+- 默认值: `{}`
+- 是否必传: `false`
+
+###### hooks.onSaveSpritesheet
+
+> 允许重写生成的spritesheet数据的钩子。如果返回值为string，则将其用作文件路径值，如果返回值为object，则将其用作将与当前spritesheet数据合并的值。返回值也可以是Promise，它应返回字符串或对象。
+
+- 默认值: `null`
+- 是否必传: `false`
+
+###### hooks.onUpdateRule
+
+> 允许重写图像的CSS输出
+
+- 默认值: `null`
+- 是否必传: `false`
+
+###### spritesmith
+
+> 雪碧图配置
+
+- 默认值: `{}`
+- 是否必传: `false`
+
+###### spritesmith.engine
+
+> 配置雪碧图转换引擎
+
+- 默认值: `pixelsmith`
+- 是否必传: `false`
+
+###### spritesmith.algorithm
+
+> 配置雪碧图算法
+
+- 默认值: `binary-tree`
+- 是否必传: `false`
+
+###### spritesmith.padding
+
+> 配置雪碧图间隔的空间
+
+- 默认值: `0`
+- 是否必传: `false`
+
+###### spritesmith.engineOpts
+
+> 引擎默认参数配置
+
+- 默认值: `{}`
+- 是否必传: `false`
+
+###### spritesmith.exportOpts
+
+> 引擎导出选项
+
+- 默认值: `{}`
+- 是否必传: `false`
+
+###### svgsprite
+
+> 生成SVG的基础配置，具体事例见链接 https://github.com/jkphl/svg-sprite#configuration-basics
+
+###### verbose
+
+> 将插件输出打印到控制台。
+
+- 默认值: `false`
+- 是否必传: `false`
 
 
 ### 四、image-webpack-loader 
@@ -80,4 +156,5 @@ handlebarsHelpers
 2. 配置
 
 官方配置说明相对清晰友好，<a href="https://github.com/tcoopman/image-webpack-loader">点击文档</a>
+
 
